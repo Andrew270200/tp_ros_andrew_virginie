@@ -1,0 +1,70 @@
+#! /usr/bin/env python
+import math
+import rospy 
+from geometry_msgs.msg import PoseStamped 
+
+def talker():
+
+	rospy.init_node('tutorial', anonymous=False)
+
+	publisher = rospy.Publisher('geometry', PoseStamped, queue_size=10)
+	rate = rospy.Rate(15)  # 15hz
+	message = PoseStamped()
+	message.pose.position.x = -math.pi
+	print(message)
+	
+	
+	
+
+	while not rospy.is_shutdown():
+	  r = 10
+	  teta = 0
+	  message.header.frame_id="map"
+	  while teta <= 2*(math.pi):
+	    message.pose.position.x=teta
+	    message.pose.position.y=math.sin(teta)
+	  
+	    publisher.publish(message)
+  	    print(message)
+   	    rate.sleep()
+	    teta += 0.1
+
+	  while teta >= 0:
+	    message.pose.position.x=teta
+	    message.pose.position.y=math.sin(-teta)
+	  
+	    publisher.publish(message)
+  	    print(message)
+   	    rate.sleep()
+	    teta -= 0.1
+	  print(message)
+
+
+
+
+
+	'''  #theta=rospy.get_time()  
+          #print(message.pose.position.x)		
+	  if message.pose.position.x < math.pi :
+	    message.pose.position.x = message.pose.position.x + 0.05
+	    message.pose.position.y = math.sin(message.pose.position.x)
+	  else:
+	    #message.pose.position.x == math.pi :
+	    message.pose.position.x = message.pose.position.x - 0.05
+	    message.pose.position.y = math.sin(-message.pose.position.x)
+	  message.header.frame_id="map"
+	  publisher.publish(message)
+  	  print(message)
+   	  rate.sleep()'''
+
+	#message.header.frame_id="map"
+	
+
+if __name__ == '__main__':
+
+	try:
+		talker()
+
+	except rospy.ROSInterruptException:
+		pass
+
